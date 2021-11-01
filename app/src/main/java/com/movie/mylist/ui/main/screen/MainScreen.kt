@@ -75,7 +75,7 @@ fun MovieList(
     LazyColumn {
 
         itemsIndexed(lazyMovieItems) { index, movie ->
-            MovieItem(movie = movie!!, onItemClick, faveClick)
+            movie?.let { MovieItem(movie = it, onItemClick, faveClick) }
         }
 
         lazyMovieItems.apply {
@@ -178,7 +178,7 @@ fun MovieImage(
         // Crop, Fit, Inside, FillHeight, FillWidth, None
         contentScale = ContentScale.Crop,
         // shows an image with a circular revealed animation.
-        circularReveal = CircularReveal(duration = 50),
+        circularReveal = CircularReveal(duration = 0),
         // shows a placeholder ImageBitmap when loading.
         placeHolder = ImageVector.vectorResource(id = R.drawable.ic_baseline_image_24),
         // shows an error ImageBitmap when the request failed.

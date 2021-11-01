@@ -7,13 +7,11 @@ import androidx.paging.PagingData
 import com.movie.mylist.api.ApiService
 import com.movie.mylist.database.local.MovieAppDataBase
 import com.movie.mylist.database.model.Movie
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 import javax.inject.Singleton
-import kotlin.coroutines.CoroutineContext
 
-private const val PAGE_SIZE = 10
+private const val PAGE_SIZE = 20
 
 @Singleton
 class MovieRemoteRepository @Inject constructor(
@@ -27,9 +25,7 @@ class MovieRemoteRepository @Inject constructor(
 
         return Pager(
             config = PagingConfig(
-                pageSize = PAGE_SIZE,
-                maxSize = PAGE_SIZE + (PAGE_SIZE * 2),
-                enablePlaceholders = false,
+                pageSize = PAGE_SIZE
             ),
             remoteMediator = MovieMediator(
                 movieApi = movieApi,
@@ -42,6 +38,18 @@ class MovieRemoteRepository @Inject constructor(
     suspend fun addToFavourite(id: Int, value: Boolean) {
         movieDB.getMovieDao().addToFavourite(id, value)
     }
+
+
+    @ExperimentalPagingApi
+    val pager = Pager(
+        PagingConfig(pageSize = 10),
+        remoteMediator = MovieMediator(
+            movieApi = movieApi,
+            movieDB = movieDB
+        )
+    ) {
+        movieDB.getMovieDao().getMoviePagingList()
+    }.flow
 
 
 }

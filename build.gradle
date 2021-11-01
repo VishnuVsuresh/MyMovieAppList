@@ -9,7 +9,7 @@ buildscript {
         retrofit_version = '2.9.0'
         moshi_version = '1.12.0'
         kotlin_coroutines_version = '1.5.2'
-        okhttpLogging_version = '4.7.2'
+        okhttpLogging_version = '4.9.1'
         glide_vesrion = '4.12.0'
         paging_version = "3.0.1"
     }

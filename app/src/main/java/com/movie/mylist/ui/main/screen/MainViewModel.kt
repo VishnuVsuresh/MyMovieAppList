@@ -1,13 +1,12 @@
 package com.movie.mylist.ui.main.screen
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.paging.ExperimentalPagingApi
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
 import com.movie.mylist.database.MovieRemoteRepository
+import com.movie.mylist.database.MovieRepository
 import com.movie.mylist.database.model.Movie
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -18,14 +17,14 @@ import javax.inject.Inject
 
 @ExperimentalPagingApi
 @HiltViewModel
-class MainViewModel @Inject constructor(private val respository: MovieRemoteRepository) :
+class MainViewModel @Inject constructor(private val respository: MovieRemoteRepository,private val repo: MovieRepository) :
     ViewModel() {
 
 
-    lateinit var movies: Flow<PagingData<Movie>>
+    // lateinit var movies: Flow<PagingData<Movie>>
 
     init {
-        loadMovies()
+        //  loadMovies()
     }
 
 
@@ -36,16 +35,15 @@ class MainViewModel @Inject constructor(private val respository: MovieRemoteRepo
        }*/
 
 
-//    @ExperimentalPagingApi
-//    val movies: Flow<PagingData<Movie>> =
-//        respository.getMovieFromMediator().cachedIn(viewModelScope)
 
-    @ExperimentalPagingApi
-    fun loadMovies() {
-        viewModelScope.launch(Dispatchers.IO) {
-            movies = respository.getMovieFromMediator().cachedIn(viewModelScope)
-        }
-    }
+
+//    @ExperimentalPagingApi
+//    fun loadMovies() {
+//        viewModelScope.launch(Dispatchers.IO) {
+//            movies = respository.getMovieFromMediator().cachedIn(viewModelScope)
+//        }
+//    }
+
 
     fun addToFav(id: Int, value: Boolean) {
 
@@ -54,6 +52,19 @@ class MainViewModel @Inject constructor(private val respository: MovieRemoteRepo
         }
 
     }
+
+    @ExperimentalPagingApi
+    val movies: Flow<PagingData<Movie>> =
+        respository.getMovieFromMediator()
+
+
+
+    /*val movies: Flow<PagingData<Movie>> =
+        repo.getNowPlayingMovies().cachedIn(viewModelScope)*/
+
+//    @ExperimentalPagingApi
+//    val movies: Flow<PagingData<Movie>> =
+//        respository.pager
 
 
 }

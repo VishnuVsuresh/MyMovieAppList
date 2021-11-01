@@ -35,5 +35,6 @@ data class Movie(
 
     @Transient
     @ColumnInfo(name = "favourite")
-    var favorite: Boolean=false
+    var favorite: Boolean=false,
+
 ): Parcelable

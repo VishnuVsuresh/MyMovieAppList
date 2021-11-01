@@ -13,6 +13,9 @@ interface MovieDao {
     @Query("SELECT * FROM movie_table")
     fun getMovieList(): LiveData<List<Movie>>
 
+    @Query("SELECT * FROM movie_table")
+    fun getMovieTotalList(): List<Movie>
+
 
     @Query("SELECT * FROM movie_table")
     fun getMoviePagingList(): PagingSource<Int,Movie>
