@@ -1,6 +1,5 @@
 package com.movie.mylist.ui.main.screen
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
@@ -16,6 +15,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
+import androidx.paging.ExperimentalPagingApi
 import com.movie.mylist.R
 import com.movie.mylist.api.ApiService
 import com.movie.mylist.database.model.Movie
@@ -23,8 +23,9 @@ import com.movie.mylist.ui.theme.colorRed
 import com.movie.mylist.ui.theme.onyx
 import com.movie.mylist.ui.theme.shapes
 
+@ExperimentalPagingApi
 @Composable
-fun DetailScreen(navController: NavHostController,movie: Movie) {
+fun DetailScreen(navController: NavHostController, movie: Movie, viewModel: MainViewModel) {
     val checkedState = remember { mutableStateOf(movie.favorite) }
     Scaffold(backgroundColor = Color.Transparent) {
         Column {
@@ -55,6 +56,7 @@ fun DetailScreen(navController: NavHostController,movie: Movie) {
                         imageVector = ImageVector.vectorResource(id =if(checkedState.value)R.drawable.ic_baseline_favorite_24 else R.drawable.ic_baseline_favorite_border_24),
                         contentDescription = "",tint= colorRed,modifier = Modifier.clickable {
                             checkedState.value=!checkedState.value
+                            viewModel.addToFav(movie.movieId,checkedState.value)
                         }
                     )
                 }

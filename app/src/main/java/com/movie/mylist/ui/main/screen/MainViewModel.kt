@@ -17,24 +17,11 @@ import javax.inject.Inject
 
 @ExperimentalPagingApi
 @HiltViewModel
-class MainViewModel @Inject constructor(private val respository: MovieRemoteRepository,private val repo: MovieRepository) :
+class MainViewModel @Inject constructor(private val remoteRepository: MovieRemoteRepository,private val repository: MovieRepository) :
     ViewModel() {
 
 
     // lateinit var movies: Flow<PagingData<Movie>>
-
-    init {
-        //  loadMovies()
-    }
-
-
-    /*   fun startDetailActivity(activity: Activity, movie: Movie) {
-           activity.startActivity(Intent(activity, MovieDetail::class.java)?.apply {
-               putExtra("id", movie.id)
-           })
-       }*/
-
-
 
 
 //    @ExperimentalPagingApi
@@ -46,21 +33,19 @@ class MainViewModel @Inject constructor(private val respository: MovieRemoteRepo
 
 
     fun addToFav(id: Int, value: Boolean) {
-
         viewModelScope.launch(Dispatchers.IO) {
-            respository.addToFavourite(id, value)
+            remoteRepository.addToFavourite(id, value)
         }
-
     }
 
     @ExperimentalPagingApi
     val movies: Flow<PagingData<Movie>> =
-        respository.getMovieFromMediator()
+        remoteRepository.getMovieFromMediator()
 
 
 
     /*val movies: Flow<PagingData<Movie>> =
-        repo.getNowPlayingMovies().cachedIn(viewModelScope)*/
+        repository.getNowPlayingMovies().cachedIn(viewModelScope)*/
 
 //    @ExperimentalPagingApi
 //    val movies: Flow<PagingData<Movie>> =
