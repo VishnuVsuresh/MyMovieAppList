@@ -30,13 +30,13 @@ interface MovieDao {
     @Delete
     fun delete(user: Movie)
 
-    @Query("Select * from movie_table WHERE id = :id")
+    @Query("Select * from movie_table WHERE movieId = :id")
     fun getMovie(id: Int): Movie
 
     @Query("DELETE FROM movie_table")
     suspend fun deleteAll()
 
-    @Query("UPDATE movie_table SET favourite=:favorite WHERE id = :id")
+    @Query("UPDATE movie_table SET favourite=:favorite WHERE movieId = :id")
     suspend fun addToFavourite(id: Int, favorite: Boolean)
 
 }

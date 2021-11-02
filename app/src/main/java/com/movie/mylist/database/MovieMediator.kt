@@ -23,7 +23,7 @@ class MovieMediator(
     var page = STARTING_PAGE_INDEX
     override suspend fun load(loadType: LoadType, state: PagingState<Int, Movie>): MediatorResult {
         try {
-            /*   val pageKeyData = getKeyPageData(loadType, state)
+              /* val pageKeyData = getKeyPageData(loadType, state)
                 page = when (pageKeyData) {
                    is MediatorResult.Success -> {
                        return pageKeyData
@@ -35,25 +35,19 @@ class MovieMediator(
 
             page = when (loadType) {
                 LoadType.REFRESH -> {
-                    Timber.e("   key pageKeyData REFRESH")
+
                     STARTING_PAGE_INDEX
-                } // we're refreshing so just reset the page
+                }
                 LoadType.PREPEND -> {
-                    Timber.e("   key pageKeyData PREPEND")
                     return MediatorResult.Success(endOfPaginationReached = true)  // shouldn't need to prepend
                 }
                 LoadType.APPEND -> {
-                    Timber.e("   key pageKeyData APPEND")
-                    // work out the next page number
                     page + 1
                 }
             }
-            Timber.e("   key current page $page")
-            val response = movieApi.getPopularMovieList(position = page)
-            Timber.e("  key  response  ${response.page} next Page ${response.total_pages}  confi ${state.config.pageSize}")
-            val isEndOfList = response.total_pages < response.page
-            Timber.e("  key isEndOfList ${isEndOfList} ")
 
+            val response = movieApi.getPopularMovieList(position = page)
+            val isEndOfList = response.total_pages < response.page
             movieDB.withTransaction {
                 if (loadType == LoadType.REFRESH) {
                     movieDB.getMovieKeyDao().deleteAll()
@@ -64,14 +58,14 @@ class MovieMediator(
                 val list = response.results?.map {
                     // Timber.e(" keys prev ${it.id}  $prevKey next $nextKey")
                     MovieKey(
-                        movieId = it.id,
+                        movieId = it.movieId,
                         prevKey = prevKey,
                         nextKey = nextKey,
                         key = response.page
                     )
                 }*/
 
-               // movieDB.getMovieKeyDao().insertAll(list)
+              // movieDB.getMovieKeyDao().insertAll(list)
                 movieDB.getMovieDao().insertAll(response.results)
             }
             return MediatorResult.Success(endOfPaginationReached = isEndOfList)
@@ -123,7 +117,7 @@ class MovieMediator(
         return state.pages
             .firstOrNull() { it.data.isNotEmpty() }
             ?.data?.firstOrNull()
-            ?.let { movie -> movieDB.getMovieKeyDao().getMovieRemoteKey(movie.id) }
+            ?.let { movie -> movieDB.getMovieKeyDao().getMovieRemoteKey(movie.movieId) }
     }
 
     /**
@@ -133,7 +127,7 @@ class MovieMediator(
 
         return state.anchorPosition?.let { pos ->
             state.closestItemToPosition(pos)?.let {
-                movieDB.getMovieKeyDao().getMovieRemoteKey(it.id)
+                movieDB.getMovieKeyDao().getMovieRemoteKey(it.movieId)
             }
         }
 
@@ -146,10 +140,9 @@ class MovieMediator(
         return state.pages
             .lastOrNull { it.data.isNotEmpty() }?.data?.lastOrNull()
             ?.let { movie ->
-                Timber.e("   key getLastRemoteKey lastOrNull ${movie?.id}")
-                movieDB.getMovieKeyDao().getMovieRemoteKey(movie.id)
+                Timber.e("   key getLastRemoteKey lastOrNull ${movie?.movieId}")
+                movieDB.getMovieKeyDao().getMovieRemoteKey(movie.movieId)
             }
     }
-
 
 }

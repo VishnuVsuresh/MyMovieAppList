@@ -3,8 +3,9 @@ package com.movie.mylist.database.model
 import android.os.Parcelable
 import androidx.room.ColumnInfo
 import androidx.room.Entity
-import androidx.room.Ignore
+
 import androidx.room.PrimaryKey
+import com.squareup.moshi.Json
 import kotlinx.parcelize.Parcelize
 
 @Parcelize
@@ -14,8 +15,12 @@ data class Movie(
     val adult: Boolean,
     @ColumnInfo(name = "backdrop_path")
     val backdrop_path: String,
-    @PrimaryKey
-    val id: Int,
+    @Transient
+    @PrimaryKey(autoGenerate = true)
+    @ColumnInfo(name = "autoKey")
+    val autoId: Int = 0,
+    @Json(name = "id")
+    val movieId: Int,
     @ColumnInfo(name = "original_language")
     val original_language: String,
     @ColumnInfo(name = "original_title")
@@ -31,10 +36,10 @@ data class Movie(
     @ColumnInfo(name = "vote_average")
     val vote_average: Double,
     @ColumnInfo(name = "vote_count")
-    val vote_count: Int ,
+    val vote_count: Int,
 
     @Transient
     @ColumnInfo(name = "favourite")
-    var favorite: Boolean=false,
+    var favorite: Boolean = false,
 
-): Parcelable
+    ) : Parcelable

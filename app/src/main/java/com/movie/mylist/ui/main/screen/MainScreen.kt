@@ -158,7 +158,7 @@ fun MovieItem(
                     .size(20.dp, 20.dp)
                     .clickable {
                         checkedState.value = !movie.favorite
-                        faveClick?.invoke(movie.id, checkedState.value)
+                        faveClick?.invoke(movie.movieId, checkedState.value)
                     }, tint = colorRed
             )
         }
